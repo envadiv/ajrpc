@@ -7,7 +7,7 @@ import {
     JsonRpcErrorCode,
     PairedChannel,
     WebSocketChannel,
-} from './jsonrpc';
+} from './ajrpc';
 
 
 test("PairedChannel.send()", async () => {

@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const globals_1 = require("@jest/globals");
-const jsonrpc_1 = require("./jsonrpc");
+const ajrpc_1 = require("./ajrpc");
 (0, globals_1.test)("PairedChannel.send()", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create();
+    const [A, B] = ajrpc_1.PairedChannel.create();
     let resolve;
     const promise = new Promise(fn => {
         resolve = fn;
@@ -23,7 +23,7 @@ const jsonrpc_1 = require("./jsonrpc");
     (0, globals_1.expect)(result).toEqual("test message");
 }));
 (0, globals_1.test)("PairedChannel.break = true", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create();
+    const [A, B] = ajrpc_1.PairedChannel.create();
     let resolve;
     const result1 = yield new Promise(resolve => {
         B.setHandler(message => resolve(message));
@@ -54,7 +54,7 @@ const jsonrpc_1 = require("./jsonrpc");
             this.channel.close();
         }
     }
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(new jsonrpc_1.WebSocketChannel(new MockWebSocket(A))), remote = new jsonrpc_1.JsonRpc(new jsonrpc_1.WebSocketChannel(new MockWebSocket(B)));
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(new ajrpc_1.WebSocketChannel(new MockWebSocket(A))), remote = new ajrpc_1.JsonRpc(new ajrpc_1.WebSocketChannel(new MockWebSocket(B)));
     const impl = globals_1.jest.fn((arg) => arg);
     remote.method("test", impl);
     const value = yield local.call("test", "unique argument");
@@ -63,7 +63,7 @@ const jsonrpc_1 = require("./jsonrpc");
     remote.close();
 }));
 (0, globals_1.test)("HeartbeatChannel keepalive", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create(), callback = globals_1.jest.fn(), handler = globals_1.jest.fn(), hbc = new jsonrpc_1.HeartbeatChannel(A, 0.1, callback);
+    const [A, B] = ajrpc_1.PairedChannel.create(), callback = globals_1.jest.fn(), handler = globals_1.jest.fn(), hbc = new ajrpc_1.HeartbeatChannel(A, 0.1, callback);
     // In a JsonRpc context, the handler would be set by the JsonRpc instance
     hbc.setHandler(handler);
     // Heartbeat messages should keep it alive, but should not pass through to 
@@ -89,7 +89,7 @@ const jsonrpc_1 = require("./jsonrpc");
     hbc.close();
 }));
 (0, globals_1.test)("HeartbeatChannel timeout", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create(), callback = globals_1.jest.fn(), handler = globals_1.jest.fn(), hbc = new jsonrpc_1.HeartbeatChannel(A, 0.1, callback);
+    const [A, B] = ajrpc_1.PairedChannel.create(), callback = globals_1.jest.fn(), handler = globals_1.jest.fn(), hbc = new ajrpc_1.HeartbeatChannel(A, 0.1, callback);
     hbc.setHandler(handler);
     // First we're gonna keep it alive for a while
     for (let i = 0; i < 10; i++) {
@@ -108,7 +108,7 @@ const jsonrpc_1 = require("./jsonrpc");
     hbc.close();
 }));
 (0, globals_1.test)("JsonRpc.call()", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A), remote = new jsonrpc_1.JsonRpc(B), impl1 = globals_1.jest.fn(() => "expected result"), impl2 = globals_1.jest.fn((...params) => params);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A), remote = new ajrpc_1.JsonRpc(B), impl1 = globals_1.jest.fn(() => "expected result"), impl2 = globals_1.jest.fn((...params) => params);
     remote.method("test1", impl1);
     const result1 = yield local.call("test1", "expected argument");
     (0, globals_1.expect)(result1).toEqual("expected result");
@@ -133,7 +133,7 @@ const jsonrpc_1 = require("./jsonrpc");
     remote.close();
 }));
 (0, globals_1.test)("JsonRpc.notify()", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A), remote = new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A), remote = new ajrpc_1.JsonRpc(B);
     let resolve;
     let promise = new Promise(fn => {
         resolve = fn;
@@ -153,7 +153,7 @@ const jsonrpc_1 = require("./jsonrpc");
     remote.close();
 }));
 (0, globals_1.test)("JsonRpc.batch()", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A), remote = new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A), remote = new ajrpc_1.JsonRpc(B);
     let resolve;
     const promise = new Promise(fn => {
         resolve = fn;
@@ -180,7 +180,7 @@ const jsonrpc_1 = require("./jsonrpc");
 }));
 (0, globals_1.test)("JsonRpc.close() reject", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A);
     B.setHandler(() => { });
     // there is no remote, so this will never teriminate
     let promise = local.call("test");
@@ -189,27 +189,27 @@ const jsonrpc_1 = require("./jsonrpc");
         yield promise;
     }
     catch (error) {
-        (0, globals_1.expect)(error).toBeInstanceOf(jsonrpc_1.JsonRpcError);
+        (0, globals_1.expect)(error).toBeInstanceOf(ajrpc_1.JsonRpcError);
         // type guard just here to satisfy TypeScript
-        if (error instanceof jsonrpc_1.JsonRpcError) {
-            (0, globals_1.expect)(error.code).toBe(jsonrpc_1.JsonRpcErrorCode.Closed);
+        if (error instanceof ajrpc_1.JsonRpcError) {
+            (0, globals_1.expect)(error.code).toBe(ajrpc_1.JsonRpcErrorCode.Closed);
         }
     }
     spy.mockRestore();
 }));
 (0, globals_1.test)("JsonRpc.batch() empty", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A), remote = new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A), remote = new ajrpc_1.JsonRpc(B);
     (0, globals_1.expect)(() => {
         local.batch(() => { });
-    }).toThrow(jsonrpc_1.JsonRpcError);
+    }).toThrow(ajrpc_1.JsonRpcError);
     try {
         local.batch(() => { });
     }
     catch (error) {
-        (0, globals_1.expect)(error).toBeInstanceOf(jsonrpc_1.JsonRpcError);
-        if (error instanceof jsonrpc_1.JsonRpcError) {
-            (0, globals_1.expect)(error.code).toEqual(jsonrpc_1.JsonRpcErrorCode.InternalError);
+        (0, globals_1.expect)(error).toBeInstanceOf(ajrpc_1.JsonRpcError);
+        if (error instanceof ajrpc_1.JsonRpcError) {
+            (0, globals_1.expect)(error.code).toEqual(ajrpc_1.JsonRpcErrorCode.InternalError);
         }
     }
     // Verify that running a batch hasn't killed the call method
@@ -222,15 +222,15 @@ const jsonrpc_1 = require("./jsonrpc");
 }));
 (0, globals_1.test)("JsonRpc.call() InternalError", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A), remote = new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A), remote = new ajrpc_1.JsonRpc(B);
     remote.method("test", () => { throw Error("test error"); });
     try {
         yield local.call("test");
     }
     catch (error) {
-        (0, globals_1.expect)(error).toBeInstanceOf(jsonrpc_1.JsonRpcError);
-        if (error instanceof jsonrpc_1.JsonRpcError) {
-            (0, globals_1.expect)(error.code).toEqual(jsonrpc_1.JsonRpcErrorCode.InternalError);
+        (0, globals_1.expect)(error).toBeInstanceOf(ajrpc_1.JsonRpcError);
+        if (error instanceof ajrpc_1.JsonRpcError) {
+            (0, globals_1.expect)(error.code).toEqual(ajrpc_1.JsonRpcErrorCode.InternalError);
             (0, globals_1.expect)(error.message).toEqual("test error");
         }
     }
@@ -240,7 +240,7 @@ const jsonrpc_1 = require("./jsonrpc");
     const handler = (str) => {
         const obj = JSON.parse(str);
         const { error: { code, message } } = obj;
-        (0, globals_1.expect)(code).toBe(jsonrpc_1.JsonRpcErrorCode.InternalError);
+        (0, globals_1.expect)(code).toBe(ajrpc_1.JsonRpcErrorCode.InternalError);
         (0, globals_1.expect)(message).toBe("test error");
         resolve();
     };
@@ -251,15 +251,15 @@ const jsonrpc_1 = require("./jsonrpc");
 }));
 (0, globals_1.test)("JsonRpc.call() MethodNotFound error", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create(), local = new jsonrpc_1.JsonRpc(A);
-    new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), local = new ajrpc_1.JsonRpc(A);
+    new ajrpc_1.JsonRpc(B);
     try {
         yield local.call("test");
     }
     catch (error) {
-        (0, globals_1.expect)(error).toBeInstanceOf(jsonrpc_1.JsonRpcError);
-        if (error instanceof jsonrpc_1.JsonRpcError) {
-            (0, globals_1.expect)(error.code).toEqual(jsonrpc_1.JsonRpcErrorCode.MethodNotFound);
+        (0, globals_1.expect)(error).toBeInstanceOf(ajrpc_1.JsonRpcError);
+        if (error instanceof ajrpc_1.JsonRpcError) {
+            (0, globals_1.expect)(error.code).toEqual(ajrpc_1.JsonRpcErrorCode.MethodNotFound);
         }
     }
     let resolve;
@@ -268,7 +268,7 @@ const jsonrpc_1 = require("./jsonrpc");
     const handler = (str) => {
         const obj = JSON.parse(str);
         const { error: { code, message } } = obj;
-        (0, globals_1.expect)(code).toBe(jsonrpc_1.JsonRpcErrorCode.MethodNotFound);
+        (0, globals_1.expect)(code).toBe(ajrpc_1.JsonRpcErrorCode.MethodNotFound);
         resolve();
     };
     A.setHandler(handler);
@@ -279,8 +279,8 @@ const jsonrpc_1 = require("./jsonrpc");
 (0, globals_1.test)("JsonRpc InvalidRequest error", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'error').mockImplementation(() => { });
     const log = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create();
-    new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create();
+    new ajrpc_1.JsonRpc(B);
     const resolution = () => {
         let resolve;
         const promise = new Promise(fn => resolve = fn);
@@ -292,7 +292,7 @@ const jsonrpc_1 = require("./jsonrpc");
     const handler = globals_1.jest.fn((value) => {
         const obj = JSON.parse(value);
         let { error: { code, message }, id } = obj;
-        (0, globals_1.expect)(code).toBe(jsonrpc_1.JsonRpcErrorCode.InvalidRequest);
+        (0, globals_1.expect)(code).toBe(ajrpc_1.JsonRpcErrorCode.InvalidRequest);
         (0, globals_1.expect)(id).toBeUndefined();
         (0, globals_1.expect)(message).toBeDefined();
         resolve(undefined);
@@ -325,13 +325,13 @@ const jsonrpc_1 = require("./jsonrpc");
 }));
 (0, globals_1.test)("JsonRpc InvalidParams error", () => __awaiter(void 0, void 0, void 0, function* () {
     const spy = globals_1.jest.spyOn(console, 'log').mockImplementation(() => { });
-    const [A, B] = jsonrpc_1.PairedChannel.create(), remote = new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create(), remote = new ajrpc_1.JsonRpc(B);
     const impl = globals_1.jest.fn();
     remote.method("test", impl);
     const handler = globals_1.jest.fn((value) => {
         const obj = JSON.parse(value);
         let { error: { code, message } } = obj;
-        (0, globals_1.expect)(code).toBe(jsonrpc_1.JsonRpcErrorCode.InvalidParams);
+        (0, globals_1.expect)(code).toBe(ajrpc_1.JsonRpcErrorCode.InvalidParams);
         (0, globals_1.expect)(message).toBeDefined();
         resolve(undefined);
     });
@@ -356,8 +356,8 @@ const jsonrpc_1 = require("./jsonrpc");
     spy.mockRestore();
 }));
 (0, globals_1.test)("JsonRpc.incoming() errors from peer", () => __awaiter(void 0, void 0, void 0, function* () {
-    const [A, B] = jsonrpc_1.PairedChannel.create();
-    new jsonrpc_1.JsonRpc(B);
+    const [A, B] = ajrpc_1.PairedChannel.create();
+    new ajrpc_1.JsonRpc(B);
     const promises = [];
     const defer = (fn) => setTimeout(fn, 0);
     // This is only germane to this file because each test runs in a separate 
