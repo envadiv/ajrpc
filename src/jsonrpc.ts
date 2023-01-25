@@ -1,5 +1,3 @@
-import { getLogger } from 'loglevel';
-const log = getLogger('jsonrpc');
 
 /**
  * The negative numbered error codes are from the JSON-RPC specification. These 
@@ -147,7 +145,7 @@ export class PairedChannel implements Channel {
         if(! this.break) {
             setTimeout(() => {
                 if(this.partner == undefined) {
-                    log.error(
+                    console.error(
                         'PairedChannel.send() called before partner was set');
                 } else {
                     this.partner.handler(message);
@@ -366,7 +364,7 @@ export class JsonRpc {
      * in response to this call. So make sure to catch any errors.
      */
     public call(method: string, ...params: unknown[]): Promise<unknown> {
-        log.debug(`JsonRpc.call("${method}", ...)`);
+        console.debug(`JsonRpc.call("${method}", ...)`);
         const id = String(this.counter++);
         let message: object;
         // if we received one object like {}, then we pass that as keyword 
@@ -410,7 +408,7 @@ export class JsonRpc {
             };
             this.pending.set(String(id), resolution);
         });
-        log.debug(`JsonRpc.call() pending.size = ${this.pending.size}`);
+        console.debug(`JsonRpc.call() pending.size = ${this.pending.size}`);
         return promise;
     }
 
