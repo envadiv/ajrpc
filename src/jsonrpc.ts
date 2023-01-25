@@ -364,7 +364,6 @@ export class JsonRpc {
      * in response to this call. So make sure to catch any errors.
      */
     public call(method: string, ...params: unknown[]): Promise<unknown> {
-        console.debug(`JsonRpc.call("${method}", ...)`);
         const id = String(this.counter++);
         let message: object;
         // if we received one object like {}, then we pass that as keyword 
@@ -408,7 +407,6 @@ export class JsonRpc {
             };
             this.pending.set(String(id), resolution);
         });
-        console.debug(`JsonRpc.call() pending.size = ${this.pending.size}`);
         return promise;
     }
 

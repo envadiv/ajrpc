@@ -10,8 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JsonRpc = exports.HeartbeatChannel = exports.PairedChannel = exports.WebSocketChannel = exports.JsonRpcError = exports.JsonRpcErrorCode = void 0;
-const loglevel_1 = require("loglevel");
-const log = (0, loglevel_1.getLogger)('jsonrpc');
 /**
  * The negative numbered error codes are from the JSON-RPC specification. These
  * are largely informational at this point, though the hope would be that the
@@ -99,7 +97,7 @@ class PairedChannel {
         if (!this.break) {
             setTimeout(() => {
                 if (this.partner == undefined) {
-                    log.error('PairedChannel.send() called before partner was set');
+                    console.error('PairedChannel.send() called before partner was set');
                 }
                 else {
                     this.partner.handler(message);
@@ -273,7 +271,6 @@ class JsonRpc {
      */
     call(method, ...params) {
         var _a;
-        log.debug(`JsonRpc.call("${method}", ...)`);
         const id = String(this.counter++);
         let message;
         // if we received one object like {}, then we pass that as keyword 
@@ -315,7 +312,6 @@ class JsonRpc {
             };
             this.pending.set(String(id), resolution);
         });
-        log.debug(`JsonRpc.call() pending.size = ${this.pending.size}`);
         return promise;
     }
     /**
