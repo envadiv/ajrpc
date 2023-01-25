@@ -1,9 +1,9 @@
 {
-  "name": "jsonrpc",
+  "name": "ajrpc",
   "version": "0.1.0",
-  "description": "AJR is Another JSON-RPC implementation",
-  "main": "dist/jsonrpc.js",
-  "types": "dist/jsonrpc.d.ts",
+  "description": "Async JSON-RPC",
+  "main": "dist/ajrpc.js",
+  "types": "dist/ajrpc.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc"
