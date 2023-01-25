@@ -255,7 +255,7 @@ export class HeartbeatChannel implements Channel {
  * The PromiseResolution type is essentially a struct for storing information 
  * about a `call` that is pending.
  */
-type PromiseResolution = {
+export type PromiseResolution = {
     method: string;
     params: unknown[];
     promise: Promise<unknown>;
@@ -348,14 +348,14 @@ export class JsonRpc {
      * serialized JSON array. On the remote side, this will be interpreted as 
      * positional parameters. If you only pass a single object, i.e.
      * 
-     *      rpc.call('method', {"named": "parameters"})
+     *      rpc.call('method', \{"named": "parameters"\})
      * 
      * Then that object is serialized and sent providing more of a "named 
      * parameters" style of invocation. If you want to avoid this behavior, 
      * include a trailing undefined value in the invocation, which will be 
      * filtered out before sending, i.e.
      * 
-     *     rpc.call('method', {"named": "parameters"}, undefined)
+     *     rpc.call('method', \{"named": "parameters"\}, undefined)
      * 
      * @returns A promise that will resolve to whatever the remote 
      * implementation returns. This promise may be rejected if the JsonRpc 
@@ -452,25 +452,25 @@ export class JsonRpc {
      * single message, hopefully cutting message channel overhead and parsing 
      * time. The usage looks like this:
      * 
-     *     rpc.batch(() => {
+     *     rpc.batch(() => \{
      *          rpc.call("spiffy", "argument1", "argument2")
-     *              .then(result => {...});
+     *              .then(result => \{...\});
      *          rpc.notify("spotty", "argument1", "argument2")
-     *     });
+     *     \});
      * 
      * The other side will receive a batch of messages like:
      * 
      *     [
-     *          { 
+     *          \{ 
      *              "method": "spiffy",
      *              "params": ["argument1", "argument2"],
      *              ...
-     *          },
-     *          { 
+     *          \},
+     *          \{ 
      *              "method": "spotty",
      *              "params": ["argument1", "argument2"],
      *              ...
-     *          }
+     *          \}
      * 
      * Note: currently this is off-spec in that it does not return results to 
      * the remote peer in an array. That fact reduces the performance gains of 
