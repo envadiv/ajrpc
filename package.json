@@ -1,11 +1,12 @@
 {
   "name": "jsonrpc",
-  "version": "0.0.1",
-  "description": "Yet another JSON-RPC 2.0 implementation",
+  "version": "0.1.0",
+  "description": "AJR is Another JSON-RPC implementation",
   "main": "dist/jsonrpc.js",
   "types": "dist/jsonrpc.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "keywords": [
     "jsonrpc",
